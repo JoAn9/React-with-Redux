@@ -1,14 +1,14 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import * as courseActions from '../../actions/courseActions';
+import * as usersActions from '../../actions/userActions';
+
 
 class CoursesPage extends React.Component {
   constructor(props, context) {
     super(props, context);
 
     this.state = {
-      course: {title: ''}
+      user: {name: ''}
     };
 
     this.onTitleChange = this.onTitleChange.bind(this);
@@ -16,31 +16,29 @@ class CoursesPage extends React.Component {
   }
 
   onTitleChange(event) {
-    const course = this.state.course;
-    course.title = event.target.value;
-    this.setState({
-      course: course
-    });
+    const user = this.state.user;
+    user.name = event.target.value;
+    this.setState({user: user});
   }
 
   onClickSave() {
-    this.props.actions.createCourse(this.state.course);
+    this.props.createUser(this.state.user);
   }
 
-  courseRow(course, index) {
-    return <div key={index}>{course.title}</div>;
+  userRow(user, index) {
+    return <div key={index}>{user.name}</div>;
   }
 
   render() {
     return (
       <div>
-        <h1>Courses</h1>
-        {this.props.courses.map(this.courseRow)}
-        <h2>Add Course</h2>
+        <h1>Users</h1>
+        {this.props.users.map(this.userRow)}
+        <h2>Add User</h2>
         <input
           type="text"
           onChange={this.onTitleChange}
-          value={this.state.course.title} />
+          value={this.state.user.name} />
 
         <input
           type="submit"
@@ -52,21 +50,22 @@ class CoursesPage extends React.Component {
 }
 
 CoursesPage.propTypes = {
-  courses: PropTypes.array.isRequired,
-  actions: PropTypes.object.isRequired
+  users: PropTypes.array.isRequired,
+  createUser: PropTypes.func.isRequired
+
 };
 
 function mapStateToProps(state, ownProps) {
   return {
-    courses: state.courses
+    users: state.users
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(courseActions, dispatch)
+    createUser: user => dispatch(usersActions.createUser(user))
   };
 }
 
-const connectedStateAndProps = connect(mapStateToProps, mapDispatchToProps);
-export default connectedStateAndProps(CoursesPage);
+
+export default connect(mapStateToProps, mapDispatchToProps)(CoursesPage);
