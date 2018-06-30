@@ -3,7 +3,7 @@ import React, {PropTypes} from 'react';
 
 const LoadingDots = () => {
   return (
-    <div>Loading...</div>
+    <span>Loading...</span>
   );
 };
 
